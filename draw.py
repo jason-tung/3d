@@ -30,7 +30,7 @@ def add_box( points, x, y, z, width, height, depth ):
   # Returns a matrix of those points
   # ====================
 def generate_sphere( points, cx, cy, cz, r, step ):
-    nmat = new_matrix()
+    nmat = []
     for phi in range(30):
         phi = phi * 2 * math.pi/30
         for theta in range(30):
@@ -60,7 +60,7 @@ def add_sphere( points, cx, cy, cz, r, step ):
   # Returns a matrix of those points
   # ====================
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
-    nmat = new_matrix()
+    nmat = []
     for phi in range(30):
         phi = phi * 2 * math.pi/30
         for theta in range(30):
