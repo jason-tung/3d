@@ -61,8 +61,8 @@ def add_sphere( points, cx, cy, cz, r, step ):
   # ====================
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
     nmat = new_matrix()
-    for phi in range(60):
-        phi = phi * 2 * math.pi/60
+    for phi in range(30):
+        phi = phi * 2 * math.pi/30
         for theta in range(30):
             theta = theta * 2 * math.pi / 30
             x = math.cos(phi) * (r0 * math.cos(theta) + r1) + cx
@@ -100,22 +100,21 @@ def add_circle( points, cx, cy, cz, r, step ):
         t+= step
 
 def add_curve( points, x0, y0, x1, y1, x2, y2, x3, y3, step, curve_type ):
-
-    xcoefs = generate_curve_coefs(x0, x1, x2, x3, curve_type)[0]
-    ycoefs = generate_curve_coefs(y0, y1, y2, y3, curve_type)[0]
-
-    i = 1
-    while i <= step:
-        t = float(i)/step
-        x = t * (t * (xcoefs[0] * t + xcoefs[1]) + xcoefs[2]) + xcoefs[3]
-        y = t * (t * (ycoefs[0] * t + ycoefs[1]) + ycoefs[2]) + ycoefs[3]
-        #x = xcoefs[0] * t*t*t + xcoefs[1] * t*t + xcoefs[2] * t + xcoefs[3]
-        #y = ycoefs[0] * t*t*t + ycoefs[1] * t*t + ycoefs[2] * t + ycoefs[3]
-
-        add_edge(points, x0, y0, 0, x, y, 0)
-        x0 = x
-        y0 = y
-        t+= step
+    stepper = step
+    xc = generate_curve_coefs(x0,x1,x2,x3, curve_type)
+    yc = generate_curve_coefs(y0,y1,y2,y3, curve_type)
+    while stepper <= step + 1:
+        nx0 = 0
+        ny0 = 0
+        nx1 = 0
+        ny1 = 0
+        for x in range(4):
+            nx0 += xc[0][x] * stepper**(3-x)
+            ny0 += yc[0][x] * stepper**(3-x)
+            nx1 += xc[0][x] * (stepper-step)**(3-x)
+            ny1 += yc[0][x] * (stepper-step)**(3-x)
+        add_edge(points, nx0, ny0, 0, nx1, ny1, 0)
+        stepper+=step
 
 
 def draw_lines( matrix, screen, color ):
