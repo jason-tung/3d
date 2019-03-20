@@ -31,12 +31,15 @@ def add_box( points, x, y, z, width, height, depth ):
   # ====================
 def generate_sphere( points, cx, cy, cz, r, step ):
     nmat = new_matrix()
-    for phi in range(0,2 * Math.pi,step):
-        for theta in range(0,Math.pi,step):
-            x = r*Math.cos(theta) + cx
-            y = r*Math.sin(theta)*Math.cos(phi) + cy
-            z = r*Math.sin(theta)*Math.sin(phi) + cz
-            add_edge(nmat, x, y, z, x + 1, y + 1, z+1)
+    for phi in range(30):
+        phi = phi * 2 * math.pi/30
+        for theta in range(30):
+            theta = theta * 2 * math.pi / 30
+            x = r*math.cos(theta) + cx
+            y = r*math.sin(theta)*math.cos(phi) + cy
+            z = r*math.sin(theta)*math.sin(phi) + cz
+            add_point(nmat, x, y, z)
+    return nmat
 
   # ====================
   # adds all the points for a sphere with center 
@@ -45,7 +48,9 @@ def generate_sphere( points, cx, cy, cz, r, step ):
   # necessary points
   # ====================
 def add_sphere( points, cx, cy, cz, r, step ):
-    generate_sphere( points, cx, cy, cz, r, step )
+    nmat = generate_sphere( points, cx, cy, cz, r, step )
+    for x in nmat:
+        add_edge(points, x[0], x[1], x[2], x[0] +1, x[1] +1, x[2]+1)
 
 
   # ====================
@@ -55,7 +60,16 @@ def add_sphere( points, cx, cy, cz, r, step ):
   # Returns a matrix of those points
   # ====================
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    nmat = new_matrix()
+    for phi in range(60):
+        phi = phi * 2 * math.pi/60
+        for theta in range(30):
+            theta = theta * 2 * math.pi / 30
+            x = math.cos(phi) * (r0 * math.cos(theta) + r1) + cx
+            y = r0 * math.sin(theta) + cy
+            z = -math.sin(phi) * (r0 * math.cos(theta) + r1) + cz
+            add_point(nmat, x, y, z)
+    return nmat
 
   # ====================
   # adds all the points for a torus with center
@@ -64,7 +78,9 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
   # necessary points
   # ====================
 def add_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    nmat = generate_torus(points, cx, cy, cz, r0, r1, step)
+    for x in nmat:
+        add_edge(points, x[0], x[1], x[2], x[0] + 1, x[1] + 1, x[2] + 1)
 
 
 
